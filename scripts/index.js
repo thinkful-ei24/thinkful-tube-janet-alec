@@ -31,9 +31,13 @@ function handleFormInput(){
         format: 'json'
         },
         success: function(response) {
-          console.log('this is the response: ' + response);
+          console.log('this is from the function ' + generateHTML(response.items));
+          const toHTML = generateHTML(response.items);
           console.log(`this is exactly what we want to append + ${response.items[0].id.videoId}`)
-          $('.results').text(`this is the response: ${response.items[0].id.videoId}`);
+          // $('.results').text(`this is the id: ${response.items[0].id.videoId}
+          //   this is the title: ${response.items[0].snippet.title}
+          //   this is the thumbnail url: ${response.items[0].snippet.thumbnails.default.url}`);
+          $('.results').html(toHTML);
         },
         error: function() {
           $('.results').html("There was an error processing your request. Please try again.");
@@ -42,9 +46,21 @@ function handleFormInput(){
     });
   }
 
+const generateHTML = function(items){
+  let str = '';
+  for(let item of items){
+    // str+= 'this is the id:' + item.id.videoId + 'this is the title: ' + item.snippet.title + 'this is the thumbnail url: ' + item.snippet.thumbnails.default.url;
+    str+=`<li class="${item.id.videoId}" data-index="${item.id.videoId}">
+          <h1 class="title">${item.snippet.title}</h1>
+          <img src="${item.snippet.thumbnails.default.url}">
+        </li>`;
+  }
+  return str;
+}
   $(function() {
       console.log( "ready!" );
       handleFormInput();
+      generateHTML();
   });
 
 
